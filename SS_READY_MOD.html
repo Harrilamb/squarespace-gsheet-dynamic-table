@@ -22,7 +22,7 @@
 
 //SET THESE VARIABLES!
 //Make sure Google Sheet is visible to anyone with a link
-var gsheetId = '1jZUQSRa5sZarY8oFA1z8Lcf7ETB9mwTA8N1OQIsFip0'; //Get from URL on Google Sheet
+var gsheetId = '1v8IELNCObG-kiQ44TnP-notVV5JeoIfwvQzR-AJ0dTI'; //Get from URL on Google Sheet
 var targetElement = undefined; //I.E. - Set to "someExampleId" to move the table around the page
 //SET THESE VARIABLES!
 
@@ -45,7 +45,7 @@ $.ajax({
   function tableFill(data){
     var tableDims = {"width":data[0].length,"height":data.length};
     $.each(data,function(i,item){
-        var newrow = "<tr class='tableline'>";
+    	var newrow = "";
         $.each(item,function(j,thing){
         	if(i==0){
 				newrow = newrow+"<th>"+thing+"</th>";
@@ -53,7 +53,7 @@ $.ajax({
         		newrow = newrow+"<td>"+thing+"</td>";
 			}
         });
-        newrow = newrow + "</tr>";
+        newrow = "<tr class='tableline'>" + newrow + "</tr>";
         if(i==0){
       		$(".tabletop").append(newrow);
       	}else{

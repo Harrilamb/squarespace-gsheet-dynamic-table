@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ERC Mod</title>
+	<title>Squarespace Google Sheets Dynamic Table Mod</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-  <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+	<script
+	  src="https://code.jquery.com/jquery-3.2.1.min.js"
+	  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	  crossorigin="anonymous"></script>
 	<script>window.googleDocCallback = function () { return true; };
 	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.2.0/papaparse.min.js"></script>
@@ -19,20 +16,24 @@
 <body>
 
 <div class="tableholder">
-	<table class="table table-bordered targetTable">
+	<table class="targetTable">
 	  <thead class="tabletop">
 	  </thead>
 	  <tbody class="tablebottom"></tbody>
 	</table>
 </div>
-<div id="otherSpace">
 
 </div>
 </body>
 
 <script>
-var gsheetId = '1jZUQSRa5sZarY8oFA1z8Lcf7ETB9mwTA8N1OQIsFip0';
-var targetElement = undefined;
+//Javascript to CORS call Google and render it in the above HTML
+
+//SET THESE VARIABLES!
+//Make sure Google Sheet is visible to anyone with a link
+var gsheetId = '1v8IELNCObG-kiQ44TnP-notVV5JeoIfwvQzR-AJ0dTI'; //Get from URL on Google Sheet
+var targetElement = undefined; //I.E. - Set to "someExampleId" to move the table around the page
+//SET THESE VARIABLES!
 
 var url = 'http://docs.google.com/spreadsheets/export?id='+gsheetId+'&exportFormat=csv';
 $.ajax({
@@ -53,7 +54,7 @@ $.ajax({
   function tableFill(data){
     var tableDims = {"width":data[0].length,"height":data.length};
     $.each(data,function(i,item){
-        var newrow = "<tr class='tableline'>";
+    	var newrow = "";
         $.each(item,function(j,thing){
         	if(i==0){
 				newrow = newrow+"<th>"+thing+"</th>";
@@ -61,19 +62,20 @@ $.ajax({
         		newrow = newrow+"<td>"+thing+"</td>";
 			}
         });
-        newrow = newrow + "</tr>";
+        newrow = "<tr class='tableline'>" + newrow + "</tr>";
         if(i==0){
       		$(".tabletop").append(newrow);
       	}else{
        	 	$(".tablebottom").append(newrow);
        	}
-       	if(typeof targetElement !== "undefined"){
-			$(".targetTable").appendTo("#"+targetElement);
-		}
     });
+	if(typeof targetElement !== "undefined"){
+		$(".targetTable").appendTo("#"+targetElement);
+	}
   }
   </script>
   <style>
+  /* CHANGE STYLE TO WHATEVER YOU WANT */
   	.tableholder{
   		width:800px;
   		height:500px;
