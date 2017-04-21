@@ -1,0 +1,84 @@
+<!-- These need to be put somewhere in the header, either on the page's Advanced Settings, or sitewide if you plan to use this in multiple places 
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+	<script>window.googleDocCallback = function () { return true; };
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.2.0/papaparse.min.js"></script>
+-->
+
+<!--HTML Where the data will be placed on the page-->
+<div class="tableholder">
+	<table class="targetTable">
+	  <thead class="tabletop">
+	  </thead>
+	  <tbody class="tablebottom"></tbody>
+	</table>
+</div>
+
+<script>
+//Javascript to CORS call Google and render it in the above HTML
+
+//SET THESE VARIABLES!
+//Make sure Google Sheet is visible to anyone with a link
+var gsheetId = '1jZUQSRa5sZarY8oFA1z8Lcf7ETB9mwTA8N1OQIsFip0'; //Get from URL on Google Sheet
+var targetElement = undefined; //I.E. - Set to "someExampleId" to move the table around the page
+//SET THESE VARIABLES!
+
+var url = 'http://docs.google.com/spreadsheets/export?id='+gsheetId+'&exportFormat=csv';
+$.ajax({
+    url : url,
+    type : 'GET',
+    dataType : 'text',
+    success : function(res, status){
+        console.log('status : ' + status);
+      var data = Papa.parse(res);
+      tableFill(data.data);
+    },
+    error : function(res, status, error){
+        console.log('status : ' + status);
+        console.log(res);
+        console.log(error);
+    }
+});
+  function tableFill(data){
+    var tableDims = {"width":data[0].length,"height":data.length};
+    $.each(data,function(i,item){
+        var newrow = "<tr class='tableline'>";
+        $.each(item,function(j,thing){
+        	if(i==0){
+				newrow = newrow+"<th>"+thing+"</th>";
+			}else{
+        		newrow = newrow+"<td>"+thing+"</td>";
+			}
+        });
+        newrow = newrow + "</tr>";
+        if(i==0){
+      		$(".tabletop").append(newrow);
+      	}else{
+       	 	$(".tablebottom").append(newrow);
+       	}
+    });
+	if(typeof targetElement !== "undefined"){
+		$(".targetTable").appendTo("#"+targetElement);
+	}
+  }
+  </script>
+  
+  <style>
+  /* CHANGE STYLE TO WHATEVER YOU WANT */
+  	.tableholder{
+  		width:800px;
+  		height:500px;
+  		overflow:scroll;
+  	}
+  	
+	tr:nth-child(even) {
+		background-color: rgba(0,0,0,0.1);
+	}
+	
+	.tabletop{
+		background-color: rgba(0,0,0,0.25);
+	}
+  </style>
